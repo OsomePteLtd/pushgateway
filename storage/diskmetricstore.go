@@ -44,8 +44,6 @@ const (
 	writeQueueCapacity   = 1000
 )
 
-var errTimestamp = errors.New("pushed metrics must not have timestamps")
-
 // DiskMetricStore is an implementation of MetricStore that persists metrics to
 // disk.
 type DiskMetricStore struct {
@@ -364,10 +362,6 @@ func (dms *DiskMetricStore) checkWriteRequest(wr WriteRequest) bool {
 		}
 	}()
 
-	if timestampsPresent(wr.MetricFamilies) {
-		err = errTimestamp
-		return false
-	}
 	for _, mf := range wr.MetricFamilies {
 		sanitizeLabels(mf, wr.Labels)
 	}
